@@ -154,18 +154,17 @@ def pig_latin(sentence):
     pig_latin_words = []
 
     for word in words:
-        if word.startswith("qu"):
+        if word[:2] == "qu":  
             pig_latin_words.append(word[2:] + "quay")
-        elif word[0] in vowels:
-            pig_latin_words.append(word + "ay")
         else:
             for i, letter in enumerate(word):
                 if letter in vowels:
-                    pig_latin_words.append(word[i:] + word[:i] + "ay")
-                    break
-    
+                    if word[i - 1: i + 1] == "qu":
+                        pig_latin_words.append(word[i + 1:] + word[:i + 1] + "ay")
+                    else:
+                        pig_latin_words.append(word[i:] + word[:i] + "ay")
+                    break 
     return " ".join(pig_latin_words)
-
 
 print(pig_latin("apple"))            
 print(pig_latin("banana"))           
