@@ -5,7 +5,6 @@ import os
 import custom_module
 from datetime import datetime
 
-employees = {}
 
 def read_employees():
     try:
@@ -39,11 +38,14 @@ def column_index(column_name):
         return employees["fields"].index(column_name)
     
     except ValueError:
-        print(f"Error: Column '{column_name}' not found in  employees ['fields']") 
-        exit(1)
+        return f"Error: Column '{column_name}' not found in  employees ['fields']"
+       
 employee_id_column = column_index("employee_id")
 
-print(f"Index of 'employee_id' column: {employee_id_column}")
+if isinstance(employee_id_column, str): 
+    print(employee_id_column)
+else:
+    print(f"Index of 'employee_id' column: {employee_id_column}")
 
 
 #Task4
@@ -51,17 +53,19 @@ def first_name(row_number):
     try:
         first_name_column = column_index("first_name")
 
+        if isinstance(first_name_column, str):  
+            return first_name_column
+        
         return employees["rows"][row_number][first_name_column]
      
     except IndexError:
-        print(f"Error: Row number {row_number} is out of range.")
-        exit(1)
+        return f"Error: Row number {row_number} is out of range."
     
     except KeyError:
-        print("Error: The 'employees' dictionary structure is incorrect.")
-        exit(1)
+        return "Error: The 'employees' dictionary structure is incorrect."
 
-print(first_name(0))
+result = first_name(0)
+print(result)
 
 
 #Task5
@@ -115,7 +119,7 @@ print(all_employees_dict())
 
 #Task10
 def get_this_value():
-    return os.getenv("THISVALUE")
+    return os.getenv("THISVALUE", "ABC")
 
 print(get_this_value())
 
@@ -130,30 +134,39 @@ print(custom_module.secret)
 
 
 #Task12
-minutes1 = None
-minutes2 = None
-minutes_set = None
-minutes_list = None
+def read_csv(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            reader = csv.DictReader(file)
+            rows = [tuple(row.values()) for row in reader]
+            fields = reader.fieldnames
+
+            if fields is None:  
+                return {"fields": [], "rows": []}
+        
+        return {"fields": fields, "rows": rows}
+    
+    except FileNotFoundError:
+        return f"Error: File '{file_path}' not found."
+
+    except Exception as e:
+        return f"Error reading file '{file_path}': {str(e)}"
 
 def read_minutes():
-    global minutes1, minutes2
     minutes1 = read_csv('../csv/minutes1.csv')
     minutes2 = read_csv('../csv/minutes2.csv')
-    
+
+    if "error" in minutes1:
+        print(minutes1["error"])
+        minutes1 = {"fields": [], "rows": []}  
+
+    if "error" in minutes2:
+        print(minutes2["error"])
+        minutes2 = {"fields": [], "rows": []}  
+
     return minutes1, minutes2
 
-def read_csv(file_path):
-    with open(file_path, 'r') as file:
-        reader = csv.DictReader(file)
-        rows = [tuple(row.values()) for row in reader] 
-        fields = reader.fieldnames 
-    
-    return {
-        "fields": fields,
-        "rows": rows
-    }
-
-read_minutes()
+minutes1, minutes2 = read_minutes()
 
 print("Minutes 1:", minutes1)
 print("Minutes 2:", minutes2)
