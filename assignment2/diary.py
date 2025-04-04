@@ -4,9 +4,7 @@ try:
     with open('diary.txt', 'a') as file:
         prompt = "What happened today?" 
         while True:
-           entry = input(prompt)
-
-           
+           entry = input(prompt).strip().lower()
 
            if entry == "done for now":
                 file.write(entry + "\n") 
