@@ -1,0 +1,10 @@
+Which sections of the website are restricted for crawling?
+- /w/index.php
+- /wiki/Special:
+- Some user agents are disallowed entirely, such as GPTBot.
+
+Are there specific rules for certain user agents?
+Yes. There are rules specific to user agents like GPTBot and AhrefsBot. For example, GPTBot is completely disallowed from crawling any part of the site.
+
+Why websites use robots.txt:
+Robots.txt files are used by websites to give directions to web crawlers and bots, informing them of the parts of the website that can or cannot be crawled. It prevents overloading of servers and protects sensitive or irrelevant content from scraping. It promotes ethical scraping as it enables the owners of websites to control their content use.
